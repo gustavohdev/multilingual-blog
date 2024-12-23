@@ -122,5 +122,3 @@ const Page = async ({
     </PaddingContainer>
   );
 };
-
-export default Page;
