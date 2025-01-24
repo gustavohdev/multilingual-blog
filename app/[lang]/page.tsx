@@ -17,7 +17,14 @@ import {
 import axios from "axios";
 import { notFound } from "next/navigation";
 
-export default async function Home() {
+export default async function Home({
+  params,
+}: {
+  params: {
+    lang: string;
+  };
+}) {
+  console.log("params", params);
   const getAllPosts = async () => {
     try {
       const posts = [] as any;
