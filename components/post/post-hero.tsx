@@ -1,7 +1,7 @@
-import { Post } from "@/types/collection";
-import React from "react";
-import PostContent from "./post-content";
-import Image from "next/image";
+import { Post } from '@/types/collection';
+import React from 'react';
+import PostContent from './post-content';
+import Image from 'next/image';
 
 interface PostHeroProps {
   post: Post;

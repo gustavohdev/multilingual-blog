@@ -1,9 +1,9 @@
-import { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
-import { match as matchLocale } from "@formatjs/intl-localematcher";
-import Negotiator from "negotiator";
-import { i18n } from "./i18n.config";
+import { match as matchLocale } from '@formatjs/intl-localematcher';
+import Negotiator from 'negotiator';
+import { i18n } from './i18n.config';
 
 function getLocale(request: NextRequest): string | undefined {
   const negotiatorHeaders: Record<string, string> = {};
@@ -32,5 +32,5 @@ export default function middleware(request: NextRequest) {
 
 export const config = {
   // Matcher ignoring `next and api`
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 };

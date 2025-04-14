@@ -1,11 +1,11 @@
-import parse, { Element } from "html-react-parser";
-import Image from "next/image";
+import parse, { Element } from 'html-react-parser';
+import Image from 'next/image';
 
 const PostBody = ({ body }: { body: string }) => {
   const options = {
     replace: (domNode: any) => {
       if (domNode instanceof Element && domNode.attribs) {
-        if (domNode.name === "img") {
+        if (domNode.name === 'img') {
           const { src, alt } = domNode.attribs;
 
           return (

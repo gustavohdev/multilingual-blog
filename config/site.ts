@@ -1,29 +1,29 @@
 export interface SiteConfig {
-    siteName: string;
-    description: string;
-    currentlyAt: string;
-    socialLinks: {
-        twitter: string;
-        youtube: string;
-        github: string;
-        linkedin: string;
-        instagram: string;
-        facebook: string;
-    }
+  siteName: string;
+  description: string;
+  currentlyAt: string;
+  socialLinks: {
+    twitter: string;
+    youtube: string;
+    github: string;
+    linkedin: string;
+    instagram: string;
+    facebook: string;
+  };
 }
 
 const siteConfig: SiteConfig = {
-    siteName: "Explorer",
-    description: "A minimal and lovely travel blog",
-    currentlyAt:"Budapest",
-    socialLinks:{
-        twitter:"some",
-        youtube:"some",
-        github: "github",
-        linkedin: "some",
-        instagram:"some insta",
-        facebook:"facebook"
-    }
-}
+  siteName: 'Explorer',
+  description: 'A minimal and lovely travel blog',
+  currentlyAt: 'Budapest',
+  socialLinks: {
+    twitter: 'some',
+    youtube: 'some',
+    github: 'github',
+    linkedin: 'some',
+    instagram: 'some insta',
+    facebook: 'facebook',
+  },
+};
 
-export default siteConfig
+export default siteConfig;
