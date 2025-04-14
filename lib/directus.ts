@@ -2,13 +2,15 @@ import { Post } from '@/types/collection';
 import { createDirectus, readItems, rest, staticToken } from '@directus/sdk';
 import { cache } from 'react';
 
+export type PostType = Post | Post[];
+
 export const getPostData = cache(async (postSlug?: string) => {
   try {
     const client = createDirectus(process.env.NEXT_PUBLIC_API_URL as string)
       .with(staticToken(process.env.ADMIN_TOKEN as string))
       .with(rest());
 
-    const post = (await client.request(
+    const post = await client.request(
       readItems('post', {
         filter: {
           status: {
@@ -27,7 +29,7 @@ export const getPostData = cache(async (postSlug?: string) => {
           'category.title',
         ],
       })
-    )) as Post[];
+    );
 
     return post;
   } catch (error) {

@@ -9,7 +9,7 @@ import { notFound } from 'next/navigation';
 
 export const generateStaticParams = async () => {
   const posts = await getPostData();
-  const params = posts.map((post: Post) => {
+  const params = posts.map((post) => {
     return {
       slug: post.slug as string,
     };
@@ -25,7 +25,7 @@ const Page = async ({
     slug: string;
   };
 }) => {
-  const post = await getPostData(params.slug);
+  const post = (await getPostData(params.slug))[0] as Post;
 
   if (!post) {
     notFound();
@@ -35,7 +35,7 @@ const Page = async ({
       {/* Container */}
       <div className="space-y-10">
         {/* Post Hero */}
-        <PostHero post={post[0]} />
+        <PostHero post={post} />
         {/* Post body and Social Share */}
         <div className="flex flex-col gap-10 md:flex-row">
           <div className="relative">
@@ -70,7 +70,7 @@ const Page = async ({
               />
             </div>
           </div>
-          <PostBody body={post[0].body} />
+          <PostBody body={post.body} />
         </div>
         <CTACard />
       </div>
