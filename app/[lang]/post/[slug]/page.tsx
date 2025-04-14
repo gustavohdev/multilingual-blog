@@ -1,37 +1,19 @@
-import { DUMMY_POSTS } from "@/DUMMY_DATA";
-import CTACard from "@/components/elements/cta-card";
-import SocialLink from "@/components/elements/social-link";
-import PaddingContainer from "@/components/layout/padding-container";
-import PostBody from "@/components/post/post-body";
-import PostHero from "@/components/post/post-hero";
-import axios from "axios";
-import { notFound } from "next/navigation";
+import CTACard from '@/components/elements/cta-card';
+import SocialLink from '@/components/elements/social-link';
+import PaddingContainer from '@/components/layout/padding-container';
+import PostBody from '@/components/post/post-body';
+import PostHero from '@/components/post/post-hero';
+import { getPostData } from '@/lib/directus';
+import { Post } from '@/types/collection';
+import { notFound } from 'next/navigation';
 
 export const generateStaticParams = async () => {
-  // return DUMMY_POSTS.map((post) => {
-  //     return {
-  //         slug: post.slug
-  //     }
-  // })
-
-  const posts = await axios
-    .get(`${process.env.NEXT_PUBLIC_API_URL}/items/post`, {
-      headers: {
-        Authorization: `Bearer ${process.env.ADMIN_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-    })
-    .then((data) => {
-      return data.data.data;
-    });
-
-  const params = posts.map((post: any) => {
+  const posts = await getPostData();
+  const params = posts.map((post: Post) => {
     return {
       slug: post.slug as string,
     };
   });
-
-  console.log("myparams", params);
 
   return params || [];
 };
@@ -43,39 +25,7 @@ const Page = async ({
     slug: string;
   };
 }) => {
-  // const post = DUMMY_POSTS.find((post) => {
-  //   return post.slug === params.slug;
-  // });
-
-  const getPostData = async () => {
-    try {
-      const posts = await axios
-        .get(`${process.env.NEXT_PUBLIC_API_URL}/items/post/`, {
-          headers: {
-            Authorization: `Bearer ${process.env.ADMIN_TOKEN}`,
-            "Content-Type": "application/json",
-          },
-        })
-        .then((data) => {
-          const filteredPost = data.data.data.filter((item: any) => {
-            return item.slug === params.slug;
-          });
-          console.log("SLUG PARAMS", params.slug);
-          console.log("filteredPost", filteredPost);
-
-          return filteredPost;
-        });
-
-      return posts;
-    } catch (error) {
-      console.error(error);
-      throw new Error("Error fetching post: ");
-    }
-  };
-
-  const post = await getPostData();
-
-  console.log("MYPOSTS,", post);
+  const post = await getPostData(params.slug);
 
   if (!post) {
     notFound();

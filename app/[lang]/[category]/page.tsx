@@ -1,24 +1,18 @@
-import { DUMMY_CATEGORIES, DUMMY_POSTS } from "@/DUMMY_DATA";
-import PaddingContainer from "@/components/layout/padding-container";
-import PostList from "@/components/post/post-lists";
-import { Post } from "@/types/collection";
-import axios from "axios";
-import { notFound } from "next/navigation";
+import { DUMMY_CATEGORIES, DUMMY_POSTS } from '@/DUMMY_DATA';
+import PaddingContainer from '@/components/layout/padding-container';
+import PostList from '@/components/post/post-lists';
+import { Post } from '@/types/collection';
+import axios from 'axios';
+import { notFound } from 'next/navigation';
 
 export const generateStaticParams = async () => {
-  // return DUMMY_CATEGORIES.map((category) => {
-  //   return {
-  //     category: category.slug,
-  //   };
-  // });
-
   try {
     // @TODO: filter for only published
     const categories = await axios
       .get(`${process.env.NEXT_PUBLIC_API_URL}/items/category`, {
         headers: {
           Authorization: `Bearer ${process.env.ADMIN_TOKEN}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       })
       .then((data) => {
@@ -53,7 +47,7 @@ const Page = async ({
         {
           headers: {
             Authorization: `Bearer ${process.env.ADMIN_TOKEN}`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       );
@@ -65,7 +59,7 @@ const Page = async ({
         {
           headers: {
             Authorization: `Bearer ${process.env.ADMIN_TOKEN}`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       );
@@ -83,7 +77,7 @@ const Page = async ({
       return { filterCategory, filterPosts };
     } catch (error) {
       console.log(error);
-      throw new Error("Error fetching category");
+      throw new Error('Error fetching category');
     }
   };
 

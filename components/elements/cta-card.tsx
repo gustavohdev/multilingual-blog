@@ -1,15 +1,14 @@
-import React from "react";
-import Image from "next/image";
-import directus from "@/lib/directus";
-import axios from "axios";
-import { revalidateTag } from "next/cache";
+import React from 'react';
+import Image from 'next/image';
+import axios from 'axios';
+import { revalidateTag } from 'next/cache';
 
 const CTACard = async () => {
   const formAction = async (formData: FormData) => {
-    "use server";
+    'use server';
     try {
-      const email = formData.get("email");
-      console.log("EMAIL", email);
+      const email = formData.get('email');
+      console.log('EMAIL', email);
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/items/subscribers
       `,
@@ -19,11 +18,11 @@ const CTACard = async () => {
         {
           headers: {
             Authorization: `Bearer ${process.env.ADMIN_TOKEN}`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       );
-      revalidateTag("subscribers-count");
+      revalidateTag('subscribers-count');
       // await directus.items("subscribers").createOne({
       //     email,
       // })
@@ -56,19 +55,19 @@ const CTACard = async () => {
   const subscribersCount = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/items/subscribers?meta=total_count`,
     {
-      method: "GET",
+      method: 'GET',
       headers: {
         Authorization: `Bearer ${process.env.ADMIN_TOKEN}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       next: {
-        tags: ["subscribers-count"], // optional, depending on where you manage revalidation
+        tags: ['subscribers-count'], // optional, depending on where you manage revalidation
       },
     }
   )
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Failed to fetch subscribers count");
+        throw new Error('Failed to fetch subscribers count');
       }
       return response.json();
     })
@@ -103,7 +102,7 @@ const CTACard = async () => {
         </p>
         {/* Form */}
         <form
-          key={subscribersCount + "subscribers-form"}
+          key={subscribersCount + 'subscribers-form'}
           action={formAction}
           className="flex items-center gap-2 mt-6 w-full"
         >
@@ -120,10 +119,10 @@ const CTACard = async () => {
 
         {/* Subscribers */}
         <div className="mt-5 text-neutral-600">
-          Join our{" "}
+          Join our{' '}
           <span className="px-2 py-1 text-sm rounded-md bg-neutral-700 text-neutral-100">
             {subscribersCount}
-          </span>{" "}
+          </span>{' '}
           subscribers now !
         </div>
       </div>

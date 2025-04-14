@@ -1,25 +1,37 @@
-import {
-  TokenAuth,
-  auth,
-  authentication,
-  createDirectus,
-  rest,
-  staticToken,
-} from "@directus/sdk";
+import { Post } from '@/types/collection';
+import { createDirectus, readItems, rest, staticToken } from '@directus/sdk';
+import { cache } from 'react';
 
-// const directus = createDirectus(process.env.NEXT_PUBLIC_API_URL as string)
-// .with(staticToken(process.env.ADMIN_TOKEN as string))
-// const tokenAuth = {access_token: process.env.ADMIN_TOKEN } as TokenAuth
-const directus = createDirectus(process.env.NEXT_PUBLIC_API_URL as string)
-  // .with(staticToken(process.env.ADMIN_TOKEN as string))
-  .with(authentication());
+export const getPostData = cache(async (postSlug?: string) => {
+  try {
+    const client = createDirectus(process.env.NEXT_PUBLIC_API_URL as string)
+      .with(staticToken(process.env.ADMIN_TOKEN as string))
+      .with(rest());
 
-// const token = async () => { return await directus.getToken() }
-// console.log("my token", token)
-// await directus.setToken(process.env.ADMIN_TOKEN as string)
-//.with(staticToken(process.env.ADMIN_TOKEN as string))
-//.with(rest())
+    const post = (await client.request(
+      readItems('post', {
+        filter: {
+          status: {
+            _eq: 'draft',
+          },
+          slug: {
+            _eq: postSlug,
+          },
+        },
+        fields: [
+          '*',
+          'author.id',
+          'author.first_name',
+          'author.last_name',
+          'category.id',
+          'category.title',
+        ],
+      })
+    )) as Post[];
 
-// const directus2 = createDirectus(process.env.NEXT_PUBLIC_API_URL as string)
-
-export default directus;
+    return post;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error fetching post: ');
+  }
+});
