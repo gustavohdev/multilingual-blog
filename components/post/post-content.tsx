@@ -1,4 +1,3 @@
-import { getDictionary } from '@/lib/getDictionary';
 import { getReadingTime, getRelativeDate } from '@/lib/helper';
 import { Post } from '@/types/collection';
 import { ArrowRight } from 'lucide-react';
@@ -15,7 +14,7 @@ const PostContent = async ({
   isPostPage = false,
   locale,
 }: PostContentProps) => {
-  const dictionary = await getDictionary(locale);
+  const cityColorsCategory = ['Städte', 'Cities'];
   return (
     <div className="space-y-2">
       {/* Tags */}
@@ -24,7 +23,7 @@ const PostContent = async ({
         className={`${isPostPage ? 'text-sm' : 'text-xs @md:text-sm'} flex items-center flex-wrap gap-2 text-xs @md:text-sm text-neutral-400`}
       >
         <div
-          className={`font-medium ${post.category.title === 'Cities' ? 'text-emerald-600' : 'text-indigo-600'}`}
+          className={`font-medium ${cityColorsCategory.includes(post.category.title) ? 'text-emerald-600' : 'text-indigo-600'}`}
         >
           {post.category.title}
         </div>

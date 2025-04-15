@@ -1,30 +1,49 @@
 import PaddingContainer from '@/components/layout/padding-container';
 import PostList from '@/components/post/post-lists';
-import axios from 'axios';
+import { getClient } from '@/lib/directus';
+import { readItems } from '@directus/sdk';
 import { notFound } from 'next/navigation';
 
 export const generateStaticParams = async () => {
   try {
-    // @TODO: filter for only published
-    const categories = await axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}/items/category`, {
-        headers: {
-          Authorization: `Bearer ${process.env.ADMIN_TOKEN}`,
-          'Content-Type': 'application/json',
+    const client = getClient();
+
+    const categories = await client.request(
+      readItems('category', {
+        filter: {
+          status: {
+            _eq: 'draft',
+          },
         },
+        fields: ['slug'],
       })
-      .then((data) => {
-        return data.data.data;
-      });
+    );
+
+    if (!categories) {
+      return [];
+    }
 
     const params = categories.map((cat: any) => {
       return {
         category: cat.slug as string,
+        lang: 'en',
       };
     });
 
-    return params || [];
-  } catch (error) {}
+    /* with mulltiple languages we would map through all locales and in other places as well */
+    const localisedParams = categories.map((cat: any) => {
+      return {
+        category: cat.slug as string,
+        lang: 'de',
+      };
+    });
+
+    const allParams = params.concat(localisedParams ?? []);
+    return allParams || [];
+  } catch (error) {
+    console.log(error);
+    throw new Error('Error fetching categories');
+  }
 };
 
 const Page = async ({
@@ -37,71 +56,79 @@ const Page = async ({
 }) => {
   const locale = params.lang;
   const getCategoryData = async () => {
-    // get categories
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/items/category
-      `,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.ADMIN_TOKEN}`,
-            'Content-Type': 'application/json',
+      const client = getClient();
+
+      const category = await client.request(
+        readItems('category', {
+          filter: {
+            status: {
+              _eq: 'draft',
+            },
+            slug: {
+              _eq: params.category,
+            },
           },
-        }
+          fields: [
+            '*',
+            'translations.*',
+            'posts.*',
+            'posts.author.id',
+            'posts.author.first_name',
+            'posts.author.last_name',
+            'posts.category.id',
+            'posts.category.title',
+            'posts.translations.*',
+          ],
+        })
       );
 
-      // get posts
-      const responsePosts = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/items/post
-      `,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.ADMIN_TOKEN}`,
-            'Content-Type': 'application/json',
+      console.log('category data', category);
+
+      if (locale === 'en') {
+        return category;
+      } else {
+        const localisedCategory = [
+          {
+            ...category[0],
+            title: category[0].translations.title,
+            description: category[0].translations.description,
+            posts: category[0].posts.map((post: any) => {
+              return {
+                ...post,
+                title: post.translations[0].title,
+                description: post.translations[0].description,
+                body: post.translations[0].body,
+                category: {
+                  ...post.category,
+                  title: category[0].translations[0].title,
+                },
+              };
+            }),
           },
-        }
-      );
-
-      // filterCategory
-      const filterCategory = response.data.data.filter((category: any) => {
-        return category.slug === params.category;
-      });
-
-      //fillterPosts
-      const filterPosts = responsePosts.data.data.filter((item: any) => {
-        return item.category === filterCategory[0].id;
-      });
-
-      return { filterCategory, filterPosts };
+        ];
+        return localisedCategory;
+      }
     } catch (error) {
-      console.log(error);
-      throw new Error('Error fetching category');
+      console.error(error);
+      throw new Error('Error fetching post ');
     }
   };
 
-  const { filterCategory, filterPosts } = await getCategoryData();
+  const category = await getCategoryData();
 
-  if (!filterCategory) {
+  if (!category) {
     notFound();
   }
-
-  // const typeCorrectedCategory = filterCategory as unknown as {
-  //   id: string;
-  //   title: string;
-  //   description: string;
-  //   slug: string;
-  //   post: Post[];
-  // };
 
   return (
     <PaddingContainer>
       <div className="mb-10">
-        <h1 className="text-4xl font-semibold">{filterCategory[0].title}</h1>
-        <p className="text-lg text-neutral-600">{filterPosts[0].description}</p>
+        <h1 className="text-4xl font-semibold">{category[0]?.title}</h1>
+        <p className="text-lg text-neutral-600">{category[0]?.description}</p>
       </div>
-      <PostList locale={locale} posts={filterPosts} />
+      <PostList locale={locale} posts={category[0]?.posts} />
     </PaddingContainer>
   );
 };
-
 export default Page;

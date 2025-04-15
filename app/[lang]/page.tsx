@@ -13,8 +13,8 @@ export default async function Home({
     lang: string;
   };
 }) {
-  const posts = await getPostData();
   const locale = params.lang;
+  const posts = await getPostData({ locale });
   if (!posts) {
     notFound();
   }

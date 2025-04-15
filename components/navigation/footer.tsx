@@ -17,7 +17,7 @@ const Footer = async ({ locale }: { locale: string }) => {
           </p>
         </div>
         {/* Socially and Currently At */}
-        <div className="flex flex-wrap justify-around gap-4 mt-6">
+        <div className="flex flex-wrap justify-between gap-4 mt-6 mr-5">
           <div>
             <div className="font-medium">#exploretheworld</div>
             <div className="flex items-center gap-3 mt-2 text-neutral-600">

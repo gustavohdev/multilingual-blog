@@ -8,14 +8,26 @@ import { Post } from '@/types/collection';
 import { notFound } from 'next/navigation';
 
 export const generateStaticParams = async () => {
-  const posts = await getPostData();
-  const params = posts.map((post) => {
+  const posts = await getPostData({ locale: 'en' });
+  const postsDE = await getPostData({ locale: 'de' });
+
+  const params = posts.map((post: any) => {
     return {
       slug: post.slug as string,
+      lang: 'en',
     };
   });
 
-  return params || [];
+  const localisedParams = postsDE.map((post: any) => {
+    return {
+      slug: post.slug as string,
+      lang: 'de',
+    };
+  });
+
+  const allParams = params?.concat(localisedParams) ?? [];
+
+  return allParams || [];
 };
 
 const Page = async ({
@@ -26,8 +38,10 @@ const Page = async ({
     lang: string;
   };
 }) => {
-  const post = (await getPostData(params.slug))[0] as Post;
   const locale = params.lang;
+  const post = (
+    await getPostData({ postSlug: params.slug, locale })
+  )[0] as Post;
 
   if (!post) {
     notFound();

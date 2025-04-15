@@ -13,6 +13,10 @@ export const getReadingTime = async (text: string, locale: string) => {
   return template.replace('{{count}}', minutesRounded.toString());
 };
 
+const supportedLocales = ['en', 'de']; // expand this as needed
+
 export const getRelativeDate = (date: string, locale: string) => {
-  return DateTime.fromISO(date).setLocale(locale).toRelative();
+  const safeLocale = supportedLocales.includes(locale) ? locale : 'en';
+
+  return DateTime.fromISO(date).setLocale(safeLocale).toRelative();
 };
