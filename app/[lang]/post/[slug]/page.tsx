@@ -23,9 +23,11 @@ const Page = async ({
 }: {
   params: {
     slug: string;
+    lang: string;
   };
 }) => {
   const post = (await getPostData(params.slug))[0] as Post;
+  const locale = params.lang;
 
   if (!post) {
     notFound();
@@ -35,7 +37,7 @@ const Page = async ({
       {/* Container */}
       <div className="space-y-10">
         {/* Post Hero */}
-        <PostHero post={post} />
+        <PostHero locale={locale} post={post} />
         {/* Post body and Social Share */}
         <div className="flex flex-col gap-10 md:flex-row">
           <div className="relative">
@@ -72,7 +74,7 @@ const Page = async ({
           </div>
           <PostBody body={post.body} />
         </div>
-        <CTACard />
+        <CTACard locale={locale} />
       </div>
     </PaddingContainer>
   );

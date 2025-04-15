@@ -32,10 +32,10 @@ const Page = async ({
 }: {
   params: {
     category: string;
+    lang: string;
   };
 }) => {
-  console.log(params);
-
+  const locale = params.lang;
   const getCategoryData = async () => {
     // get categories
     try {
@@ -99,7 +99,7 @@ const Page = async ({
         <h1 className="text-4xl font-semibold">{filterCategory[0].title}</h1>
         <p className="text-lg text-neutral-600">{filterPosts[0].description}</p>
       </div>
-      <PostList posts={filterPosts} />
+      <PostList locale={locale} posts={filterPosts} />
     </PaddingContainer>
   );
 };

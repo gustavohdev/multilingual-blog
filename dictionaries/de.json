@@ -1,0 +1,29 @@
+{
+    "navigation": {
+        "links": {
+            "cities": "Städte",
+            "experiences": "Erlebnisse"
+        }
+    },
+    "buttons": {
+        "readMore": "Mehr lesen"
+    },
+    "ctaCard": {
+        "title": "Entdecke die Welt mit mir!",
+        "description": "Entdecke die Welt mit mir! Ich bin unterwegs",
+        "button": "Anmelden",
+        "placeholder": "Gib deine E-Mail ein.",
+        "subscriberText1": "Werde Teil unserer",
+        "subscriberText2": "Abonnenten jetzt!"
+    },
+    "footer": {
+        "description": "Ein minimalistischer und schöner Reiseblog, der",
+        "rightsText": "Alle Rechte vorbehalten | Copyright",
+        "creatorText": "Erstellt mit » von",
+        "currentlyAtText": "Zurzeit in"
+    },
+    "post": {
+        "readTime_one": " {{count}} Minute ",
+        "readTime_other": " {{count}} Minuten"
+    }
+}

@@ -1,3 +1,4 @@
+import { getDictionary } from '@/lib/getDictionary';
 import { getReadingTime, getRelativeDate } from '@/lib/helper';
 import { Post } from '@/types/collection';
 import { ArrowRight } from 'lucide-react';
@@ -6,20 +7,15 @@ import React from 'react';
 interface PostContentProps {
   post: Post;
   isPostPage?: boolean;
+  locale: string;
 }
 
-// TODO:
-// try to comment the lines that needs deep nested --- WORKED
-// try to show the data from the posts without the needed data --- WORKED
-
-// after it works, try to change the object dynamically or try to use SDK correctly --- LATER
-// SDK would be better, after it works will perform very nice in the flow the app --- LATER
-
-//@TODO-NEXT
-// It's missing the post.body, time to put it there, and watch the rest of the videos to where see if I missed something
-
-const PostContent = ({ post, isPostPage = false }: PostContentProps) => {
-  console.log('POST BODY', post);
+const PostContent = async ({
+  post,
+  isPostPage = false,
+  locale,
+}: PostContentProps) => {
+  const dictionary = await getDictionary(locale);
   return (
     <div className="space-y-2">
       {/* Tags */}
@@ -35,9 +31,9 @@ const PostContent = ({ post, isPostPage = false }: PostContentProps) => {
         <div className="w-2 h-2 rounded-full bg-neutral-200" />
         <div>{`${post.author.first_name} ${post.author.last_name}`}</div>
         <div className="w-2 h-2 rounded-full bg-neutral-200" />
-        <div>{getReadingTime(post.body)}</div>
+        <div>{getReadingTime(post.body, locale)}</div>
         <div className="w-2 h-2 rounded-full bg-neutral-200" />
-        <div>{getRelativeDate(post.date_created)}</div>
+        <div>{getRelativeDate(post.date_created, locale)}</div>
       </div>
       {/* Title */}
       <h2

@@ -4,7 +4,6 @@ import PostCard from '@/components/post/post-card';
 import PostList from '@/components/post/post-lists';
 import { getPostData } from '@/lib/directus';
 import { Post } from '@/types/collection';
-import { createDirectus, readItems, rest, staticToken } from '@directus/sdk';
 import { notFound } from 'next/navigation';
 
 export default async function Home({
@@ -15,7 +14,7 @@ export default async function Home({
   };
 }) {
   const posts = await getPostData();
-
+  const locale = params.lang;
   if (!posts) {
     notFound();
   }
@@ -23,17 +22,20 @@ export default async function Home({
   return (
     <PaddingContainer>
       <main className="h-auto space-y-10">
-        <PostCard post={posts[0] as Post} />
+        <PostCard locale={locale} post={posts[0] as Post} />
         <PostList
+          locale={locale}
           posts={
             posts?.filter(
               (post: any, index: any) => index > 0 && index < 3
             ) as Post[]
           }
         />
-        <CTACard />
-        <PostCard post={posts[3] as Post} reverse={true} />
+        <CTACard locale={locale} />
+
+        <PostCard locale={locale} post={posts[3] as Post} reverse={true} />
         <PostList
+          locale={locale}
           posts={
             posts.filter(
               (post: any, index: any) => index > 3 && index < 6

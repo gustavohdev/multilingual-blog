@@ -7,17 +7,19 @@ interface PostProps {
   post: Post;
   layout?: 'vertical' | 'horizontal';
   reverse?: boolean;
+  locale: string;
 }
 
 const PostCard = ({
   post,
   layout = 'horizontal',
   reverse = false,
+  locale,
 }: PostProps) => {
   return (
     <Link
       className={`@container ${layout === 'horizontal' ? 'grid grid-cols-1 md:grid-cols-2 gap-10' : 'space-y-10'}`}
-      href={`/post/${post.slug}`}
+      href={`/${locale}/post/${post.slug}`}
     >
       {/* Post Image  */}
       <Image
@@ -28,9 +30,7 @@ const PostCard = ({
         height={300}
       />
       {/* Post Content */}
-      <PostContent post={post} />
-
-      {/* <div>{post.title}</div> */}
+      <PostContent locale={locale} post={post} />
     </Link>
   );
 };

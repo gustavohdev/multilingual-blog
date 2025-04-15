@@ -2,8 +2,10 @@ import React from 'react';
 import Image from 'next/image';
 import axios from 'axios';
 import { revalidateTag } from 'next/cache';
+import { getDictionary } from '@/lib/getDictionary';
 
-const CTACard = async () => {
+const CTACard = async ({ locale }: { locale: string }) => {
+  const dictionary = await getDictionary(locale);
   const formAction = async (formData: FormData) => {
     'use server';
     try {
@@ -93,12 +95,10 @@ const CTACard = async () => {
       <div className="relative z-20">
         <div className="text-md font-medium">#exploretheworld</div>
         <h3 className="mt-3 text-3xl font-semibold">
-          Explore the world with me
+          {dictionary.ctaCard.title}
         </h3>
         <p className="max-w-lg mt-2 text-md">
-          Explore the world with me! I'm travelling around the world. I've
-          visited most of the great cities of USA and currently I'm travelling
-          in UE Join me!
+          {dictionary.ctaCard.description}
         </p>
         {/* Form */}
         <form
@@ -109,21 +109,21 @@ const CTACard = async () => {
           <input
             type="email"
             name="email"
-            placeholder="Write your email"
+            placeholder={dictionary.ctaCard.placeholder}
             className="w-full md:w-auto px-3 py-2 text-base rounded-md outline-none placeholder:text-sm bg-white/80 focus:ring-2 ring-neutral-600"
           ></input>
           <button className="px-3 py-2 rounded-md bg-neutral-900 text-neutral-200 whitespace-nowrap">
-            Sign Up
+            {dictionary.ctaCard.button}
           </button>
         </form>
 
         {/* Subscribers */}
         <div className="mt-5 text-neutral-600">
-          Join our{' '}
+          {dictionary.ctaCard.subscriberText1}{' '}
           <span className="px-2 py-1 text-sm rounded-md bg-neutral-700 text-neutral-100">
             {subscribersCount}
           </span>{' '}
-          subscribers now !
+          {dictionary.ctaCard.subscriberText2}
         </div>
       </div>
     </div>

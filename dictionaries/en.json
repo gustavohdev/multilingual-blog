@@ -21,5 +21,9 @@
         "rightsText": "All rights are reserved | Copyright",
         "creatorText": "Created with » by",
         "currentlyAtText": "Currently at"
+    },
+    "post": {
+        "readTime_one": " {{count}} minute",
+        "readTime_other": " {{count}} minutes"
     }
 }

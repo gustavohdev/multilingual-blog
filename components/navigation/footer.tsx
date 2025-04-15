@@ -2,8 +2,10 @@ import PaddingContainer from '../layout/padding-container';
 import siteConfig from '@/config/site';
 import Link from 'next/link';
 import SocialLink from '../elements/social-link';
+import { getDictionary } from '@/lib/getDictionary';
 
-const Footer = () => {
+const Footer = async ({ locale }: { locale: string }) => {
+  const dictionary = await getDictionary(locale);
   return (
     <div className="py-6 border-t mt-10">
       {/* Title and Description */}
@@ -11,10 +13,10 @@ const Footer = () => {
         <div>
           <h2 className="text-3xl font-bold">{siteConfig.siteName}</h2>
           <p className="max-w-md mt-2 text-lg text-neutral-700">
-            {siteConfig.description}
+            {dictionary.footer.description}
           </p>
         </div>
-        {/* Soccially and Currently At */}
+        {/* Socially and Currently At */}
         <div className="flex flex-wrap justify-around gap-4 mt-6">
           <div>
             <div className="font-medium">#exploretheworld</div>
@@ -46,7 +48,9 @@ const Footer = () => {
             </div>
           </div>
           <div>
-            <div className="text-sm text-neutral-400">Currently At</div>
+            <div className="text-sm text-neutral-400">
+              {dictionary.footer.currentlyAtText}
+            </div>
             <div className="flex items-center gap-2 px-3 py-2 bg-white rounded-md shadow-md">
               <div className="bg-emerald-600 rounded-full w-2 h-2" />
               {siteConfig.currentlyAt}
@@ -56,15 +60,15 @@ const Footer = () => {
         {/* Bottom Section */}
         <div className="py-3 border-t flex flex-wrap items-center gap-4 justify-between mt-16">
           <div className="text-sm text-neutral-400">
-            All rights reserverd | Copyright {new Date().getFullYear()}
+            {dictionary.footer.rightsText} {new Date().getFullYear()}
           </div>
           <div>
-            Made with love by {''}
+            {dictionary.footer.creatorText}{' '}
             <Link
               className="underline underline-offset-4"
-              href="https://google.com.br"
+              href="https://gustavoavide.com"
             >
-              @gus still to change it
+              @gus
             </Link>
           </div>
         </div>
