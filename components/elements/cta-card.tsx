@@ -10,7 +10,6 @@ const CTACard = async ({ locale }: { locale: string }) => {
     'use server';
     try {
       const email = formData.get('email');
-      console.log('EMAIL', email);
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/items/subscribers
       `,

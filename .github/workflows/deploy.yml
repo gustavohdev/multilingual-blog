@@ -40,6 +40,6 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy to Vercel
-        run: cd /home/runner/work/nextjs13-blog/nextjs13-blog && npx vercel --prod --token $VERCEL_TOKEN --yes
+        run: cd /home/runner/work/multilingual-blog/multilingual-blog && npx vercel --prod --token $VERCEL_TOKEN --yes
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}

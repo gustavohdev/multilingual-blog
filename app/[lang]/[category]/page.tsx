@@ -83,8 +83,6 @@ const Page = async ({
         })
       );
 
-      console.log('category data', category);
-
       if (locale === 'en') {
         return category;
       } else {
