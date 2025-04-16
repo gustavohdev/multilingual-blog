@@ -18,12 +18,12 @@ const siteConfig: SiteConfig = {
     'A minimal and lovely travel blog which shares experiences and cities around the world"',
   currentlyAt: 'Budapest',
   socialLinks: {
-    twitter: 'some',
-    youtube: 'some',
-    github: 'github',
-    linkedin: 'some',
-    instagram: 'some insta',
-    facebook: 'facebook',
+    twitter: 'https://x.com/',
+    youtube: 'https://www.youtube.com/',
+    github: 'https://github.com/gustavohdev',
+    linkedin: 'https://www.linkedin.com/in/ghsdevs/',
+    instagram: 'https://www.instagram.com/',
+    facebook: 'https://www.facebook.com/',
   },
 };
 

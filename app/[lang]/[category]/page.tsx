@@ -91,17 +91,17 @@ const Page = async ({
         const localisedCategory = [
           {
             ...category[0],
-            title: category[0].translations.title,
-            description: category[0].translations.description,
+            title: category[0].translations[0]?.title,
+            description: category[0].translations[0]?.description,
             posts: category[0].posts.map((post: any) => {
               return {
                 ...post,
-                title: post.translations[0].title,
-                description: post.translations[0].description,
-                body: post.translations[0].body,
+                title: post.translations[0]?.title,
+                description: post.translations[0]?.description,
+                body: post.translations[0]?.body,
                 category: {
                   ...post.category,
-                  title: category[0].translations[0].title,
+                  title: category[0].translations[0]?.title,
                 },
               };
             }),

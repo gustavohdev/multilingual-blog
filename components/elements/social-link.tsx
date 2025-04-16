@@ -3,7 +3,6 @@ import {
   Github,
   Instagram,
   Linkedin,
-  Tablet,
   Twitter,
   Youtube,
 } from 'lucide-react';
@@ -51,7 +50,7 @@ const SocialLink = ({
   };
 
   return (
-    <Link href={link}>
+    <Link href={link} target="_blank">
       <div
         className={`${
           isSharedUrl
