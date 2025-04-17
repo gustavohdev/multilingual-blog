@@ -6,12 +6,13 @@
         }
     },
     "buttons": {
-        "readMore": "Mehr lesen"
+        "readMore": "Mehr Lesen"
     },
     "ctaCard": {
         "title": "Entdecke die Welt mit mir!",
         "description": "Erkunde die Welt mit mir! Ich reise um die Welt 🌍. Ich habe die meisten großartigen Städte der 🇺🇸 besucht und bin derzeit in 🇪🇺 unterwegs. Komm mit!",
         "button": "Anmelden",
+        "button_loading": "Abonnieren Sie...",
         "placeholder": "Gib deine E-Mail ein.",
         "subscriberText1": "Werde Teil unserer",
         "subscriberText2": "Abonnenten jetzt!"

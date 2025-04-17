@@ -75,7 +75,9 @@ const CTACard = ({ locale }: { locale: string }) => {
             type="submit"
             className="px-3 py-2 rounded-md bg-neutral-900 text-neutral-200 whitespace-nowrap"
           >
-            {!isHandling ? 'Sign Up' : 'Subscribing...'}
+            {!isHandling
+              ? dictionary.ctaCard.button
+              : dictionary.ctaCard.button_loading}
           </button>
         </form>
       </div>
