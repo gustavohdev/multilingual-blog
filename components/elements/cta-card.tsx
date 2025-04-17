@@ -1,94 +1,53 @@
-import React from 'react';
+'use client';
+import React, { FormEvent, useEffect, useState } from 'react';
 import Image from 'next/image';
-import axios from 'axios';
-import { revalidateTag } from 'next/cache';
+import { createDirectus, rest } from '@directus/sdk';
 import { getDictionary } from '@/lib/getDictionary';
 
-const CTACard = async ({ locale }: { locale: string }) => {
-  const dictionary = await getDictionary(locale);
-  const formAction = async (formData: FormData) => {
-    'use server';
+const CTACard = ({ locale }: { locale: string }) => {
+  const [dictionary, setDictionary] = useState<any>(null);
+  const [email, setEmail] = useState('');
+  const [isHandling, setIsHandling] = useState(false);
+
+  useEffect(() => {
+    const fetchDictionary = async () => {
+      const dict = await getDictionary(locale);
+      setDictionary(dict);
+    };
+
+    fetchDictionary();
+  }, [locale]);
+
+  const submithandler = async (e: FormEvent) => {
+    e.preventDefault();
+
     try {
-      const email = formData.get('email');
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/items/subscribers
-      `,
-        {
-          email: email,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.ADMIN_TOKEN}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      revalidateTag('subscribers-count');
-      // await directus.items("subscribers").createOne({
-      //     email,
-      // })
+      setIsHandling(true);
+      const client = createDirectus(
+        process.env.NEXT_PUBLIC_API_URL as string
+      ).with(rest());
+
+      /* Don't send anything */
+      // await client.request(createItem('subscribers ', { email }));
+
+      setIsHandling(false);
+      setEmail('');
     } catch (error) {
       console.log(error);
+      setIsHandling(false);
     }
   };
-
-  //   const subscribersCount = await axios
-  //     .get(
-  //       `${process.env.NEXT_PUBLIC_API_URL}/items/subscribers?meta=total_count
-  //   `,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${process.env.ADMIN_TOKEN}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //         next: {
-  //           tags: ["subscribers-count"],
-  //         },
-  //       }
-  //     )
-  //     .then((data) => {
-  //       //   console.log("MY SUBS", data.data.meta.total_count);
-  //       //   //data.meta.total_count;
-  //       return data.data.meta.total_count;
-  //     })
-  //     .catch((err) => console.log(err));
-
-  const subscribersCount = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/items/subscribers?meta=total_count`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${process.env.ADMIN_TOKEN}`,
-        'Content-Type': 'application/json',
-      },
-      next: {
-        tags: ['subscribers-count'], // optional, depending on where you manage revalidation
-      },
-    }
-  )
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Failed to fetch subscribers count');
-      }
-      return response.json();
-    })
-    .then((data) => {
-      return data.meta.total_count;
-    })
-    .catch((error) => {
-      console.error(error);
-      return 0; // fallback in case of error
-    });
-
+  if (!dictionary) return null;
   return (
     <div className="relative px-6 py-10 overflow-hidden rounded-md bg-slate-100">
       {/* Overlay */}
       <div className="absolute inset-0 z-10 bg-gradient-to-br from-white/95 via-white/70"></div>
       <Image
+        priority
         fill
         alt="CTA Card Image"
         className="object-cover object-center"
-        src="https://images.unsplash.com/photo-1585970480901-90d6bb2a48b5?ixid=MnwzODU2NTF8MHwxfHNlYXJjaHwxOHx8RWxlcGhhbnRzJTIwdGhhaWxhbmR8ZW58MHx8fHwxNjcwMzIyNzUx&ixlib=rb-4.0.3"
+        src={`${process.env.NEXT_PUBLIC_ASSETS_URL}/f0dcf9e5-f440-4b27-9613-c1801be37f24?key=optimised`}
       />
       {/* Content Container */}
       <div className="relative z-20">
@@ -101,29 +60,24 @@ const CTACard = async ({ locale }: { locale: string }) => {
         </p>
         {/* Form */}
         <form
-          key={subscribersCount + 'subscribers-form'}
-          action={formAction}
+          onSubmit={submithandler}
           className="flex items-center gap-2 mt-6 w-full"
         >
           <input
             type="email"
             name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder={dictionary.ctaCard.placeholder}
             className="w-full md:w-auto px-3 py-2 text-base rounded-md outline-none placeholder:text-sm bg-white/80 focus:ring-2 ring-neutral-600"
           ></input>
-          <button className="px-3 py-2 rounded-md bg-neutral-900 text-neutral-200 whitespace-nowrap">
-            {dictionary.ctaCard.button}
+          <button
+            type="submit"
+            className="px-3 py-2 rounded-md bg-neutral-900 text-neutral-200 whitespace-nowrap"
+          >
+            {!isHandling ? 'Sign Up' : 'Subscribing...'}
           </button>
         </form>
-
-        {/* Subscribers */}
-        <div className="mt-5 text-neutral-600">
-          {dictionary.ctaCard.subscriberText1}{' '}
-          <span className="px-2 py-1 text-sm rounded-md bg-neutral-700 text-neutral-100">
-            {subscribersCount}
-          </span>{' '}
-          {dictionary.ctaCard.subscriberText2}
-        </div>
       </div>
     </div>
   );
