@@ -53,8 +53,8 @@ export const getPostData = cache(
   }
 );
 
-export const getClient = () => {
+export const getClient = cache(() => {
   return createDirectus(process.env.NEXT_PUBLIC_API_URL as string)
     .with(staticToken(process.env.ADMIN_TOKEN as string))
     .with(rest());
-};
+});
